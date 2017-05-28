@@ -1,0 +1,215 @@
+/*--------------------------------------------------------------------------------*/
+
+/* style.css - mock database assignment */
+
+/*--------------------------------------------------------------------------------*/
+/*basic stylings for fonts and backgrounds, etc.
+
+/* FONTS from GOOGLE
+font-family: 'Skranji', cursive;
+font-family: 'Almendra SC', serif;
+*/
+
+* {box-sizing: border-box; margin: 0; padding: 0;}
+
+.wrapper {width: 100%; margin: 0 auto;}
+
+html {
+	background-image: url(parchment.jpeg); /*image courtesy of http://www.powerpointhintergrund.com/*/
+	background-size: 100%;
+	background-repeat: repeat-y;
+    background-attachment: fixed;
+	font-family: 'Almendra SC', serif;
+	font-weight: 900;
+}
+
+body {
+  min-height: 99vh;
+  background-image: url(dragon.png);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+button, label{;font-family: 'Skranji', cursive; font-size: 1em; color: #000d31;}
+[id^='edit-data'] {width: 3.3em;}
+select, option, input {
+	font-family: 'Almendra SC', serif; 	
+	background-color: #000d31;
+	color: #f2f2f2;
+}
+
+.first{
+	font-family: 'Skranji', cursive;
+	font-size: 1.3em;
+}
+
+h1, h2 {font-family: 'Skranji', cursive; text-shadow: -.05em .05em .1em #fff8bf; text-align: center}
+
+h1{font-size: 3.7em;}
+h2{font-size: 2em;}
+
+h1, h2, p, .col {color: #000d31;}
+
+.hide {display: none;}
+
+/*--------------------------------------------------------------------------------*/
+/*This area creates a label for the file upload and synchronizes it with the button events*/
+
+input[type=file] {width: 0em; opacity: 0;}
+
+input[type=file] + label, button{
+	padding: .1em .1em .2em; .1em;
+	border-radius: .3em;
+	background: linear-gradient(#eaf6ff, #bacddb);
+	border-style: solid;
+	border-width: .1em;
+	border-color: #ffffff #ffffff #738ea3 #738ea3;
+}
+
+input[type=file] + label{padding: .3em; font-weight: 100;}
+
+/*--------------------------------------------------------------------------------*/
+/*These are the active/hover actions*/
+
+option:hover {
+	background-color: #a4a4a4;
+}
+
+input[type=file] + label:hover, button:hover{
+	cursor: pointer;
+}
+
+input[type=file] + label:active, button:active{
+	border-color:#738ea3 #738ea3 #cde2f2 #cde2f2;
+}
+
+/*--------------------------------------------------------------------------------*/
+/*Grid stylings and margins for table*/
+
+.row {
+  width: 80%;
+  margin: auto;
+  clear: both;
+}
+
+.row:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.first {padding: 1em 0 0 0;}
+.row:last-child {padding: 0 0 1em 0;}
+
+.col {
+	float: left;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	width: 18%;
+	border: .1em solid #fff8bf;
+	padding: 0 .4em;
+}
+
+.col:last-child {
+	flex-flow: column nowrap;
+	align-items: flex-start;
+}
+
+.col:nth-child(4) {width: 6em;}
+.col:nth-child(5) {width: 5em;}
+.col:last-child {width: 4em;}
+
+.first .col {border-width: 0 .1em .1em .1em;}
+
+.col:first-child{border-width: .1em .1em .1em 0;}
+.col:last-child{border-width:.1em .0 .1em .1em;}
+.first .col:first-child{border-width: 0 .1em .1em 0;}
+.first .col:last-child{border-width:.0 .0 .1em .1em;}
+
+.data .col {
+  min-height: 4em;
+	max-height: 4em;
+}
+
+.data .col:nth-child(4) {
+	width: 7.8em;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+}
+
+.data .col:nth-child(5) {width: 6.5em;}
+.data .col:last-child {width: 5.2em;}
+
+/*--------------------------------------------------------------------------------*/
+/*Misc formatting*/
+
+#character-form{display: flex; flex-flow:row wrap; justify-content: center; }
+.sep-left {
+	width: 59%; 
+	display: inline-flex;
+	flex-flow: column nowrap;
+	padding: 0 .3em;
+}
+.sep-right {
+	width: 40%; 
+	display: inline-flex;
+	flex-flow: column nowrap;
+	padding: 0 .3em;
+}
+.buttons {width: 100%;}
+
+.form-el {
+	width: 100%;
+	max-width: 16em;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+}
+
+input, select {
+	width: 11em;
+	font-size: 1em;
+	margin: 0 0 0 0;
+}
+
+label {
+	margin: 0 5em 0 0;
+}
+
+input[type=number] {
+	width: 4em;
+	margin: 0 0 0 0;
+}
+
+#add-cha{margin: 0 0 2% 18%;}
+#add-data{margin: 3% 0 0 7%;}
+
+/*--------------------------------------------------------------------------------*/
+/*Media Queries*/
+
+@media all and (max-width: 53em){
+	.row {width: 100%;}
+}
+
+@media all and (max-width: 43em){
+	.col {width: 15%;}
+}
+
+@media all and (max-width: 36em){
+	.col {font-size: 2.7vw;}
+	.col:nth-child(4){width: 7.8em;}
+	.col:nth-child(5){width: 6.5em}
+	.col:last-child{width:5.2em;}
+}
+
+@media all and (max-width: 32em){
+	h1{font-size: 11.5vw;}
+	.sep-left{width: 100%}
+	.sep-right{width:11.5em; margin: .3em 0 0 0;}
+}
+

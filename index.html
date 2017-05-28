@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  	<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<link href="https://fonts.googleapis.com/css?family=Almendra+SC|Skranji" rel="stylesheet">
+  	<title>Character Sheet</title>
+	</head>
+  
+	<body>
+			<div class="wrapper">
+			<h1>Dungeons&amp;Dragons</h1>
+			<h2>Character Sheet</h2>
+			<div class="collapse" id="database-layout">
+				<div class="add-button"><button id="add-cha">Add a Character</button>
+				</div>
+				<div class="row first">
+					<div class="col">Name</div>
+					<div class="col">Race</div>
+					<div class="col">Class</div>
+					<div class="col">Stats</div>
+					<div class="col">Portrait</div>
+					<div class="col">Edit</div>
+				</div>
+			</div>
+			<div class="collapse" id="character-form">
+				<form name="new-data" id="new-data">
+					<div class="sep-left">
+						<div class="form-el">
+							<p>Name:</p><input type="text" id="data-name" required></div>
+						<div class="form-el">
+							<p>Race:</p>
+							<select name="select-race" id="select-race" required>
+								<option name="data-race" id="race-default" class="hide" value="none" disabled selected>Pick a Race</option>
+								<option name="data-race" id="race-drag" value="Dragon">Dragon</option>
+								<option name="data-race" id="race-dwar" value="Dwarf">Dwarf</option>
+								<option name="data-race" id="race-elad" value="Eladrin">Eladrin</option>
+								<option name="data-race" id="race-elf" value="Elf">Elf</option>
+								<option name="data-race" id="race-gnom" value="Gnome">Gnome</option>
+								<option name="data-race" id="race-helf" value="Half-elf">Half-elf</option>
+								<option name="data-race" id="race-horc" value="Half-orc">Half-orc</option>
+								<option name="data-race" id="race-half" value="Halfling">Halfling</option>
+								<option name="data-race" id="race-huma" value="Human">Human</option>
+								<option name="data-race" id="race-tief" value="Tiefling">Tiefling</option>
+							</select>
+						</div>
+
+						<div class="form-el">
+							<p>Class:</p>
+							<select name="select-class" id="select-class" required>
+								<option name="data-class" id="class-default" class="hide" value="none" disabled selected>Pick a Class</option>
+								<option name="data-class" id="class-barb">Barbarian</option>
+								<option name="data-class" id="class-bard" value="Bard">Bard</option>
+								<option name="data-class" id="class-drui" value="Druid">Druid</option>
+								<option name="data-class" id="class-monk" value="Monk">Monk</option>
+								<option name="data-class" id="class-pala" value="Paladin">Paladin</option>
+								<option name="data-class" id="class-rang" value="Ranger">Ranger</option>
+								<option name="data-class" id="race-class" value="Sorcerer">Sorcerer</option>
+								<option name="data-class" id="class-warl" value="Warlock">Warlock</option>
+							</select>
+						</div>
+						<div class="form-el">
+							<p>Portrait:</p><input type="file" name="data-file" id="data-file">
+							<label for="data-file">Upload</label>
+						</div>	
+					</div>
+
+					<div class="sep-right">
+						<div class="form-el">
+							<p>Strength:</p><input type="number" name="data-str" id="data-str" step="1" min="1" required>
+						</div>
+						<div class="form-el">
+							<p>Dexterity:</p><input type="number" name="data-dex" id="data-dex" step="1" min="1" required>
+						</div>
+						<div class="form-el">
+							<p>Constitution:</p><input type="number" name="data-con" id="data-con" step="1" min="1" required>
+						</div>
+						<div class="form-el">
+							<p>Intelligence:</p><input type="number" name="data-int" id="data-int" step="1" min="1" required>
+						</div>
+						<div class="form-el">
+							<p>Wisdom:</p><input type="number" name="data-wis" id="data-wis" step="1" min="1" required>
+						</div>
+						<div class="form-el">
+							<p>Charisma:</p><input type="number" name="data-cha" id="data-cha" step="1" min="1" required>
+						</div>
+				</div>
+		        <div class="buttons">
+					<button id="add-data">Submit</button>
+					<button id="cancel-data">Cancel</button>
+				</div>
+				</form>
+			</div>
+		</div>
+		<script src="jquery-3.2.1.min.js"></script>
+		<script src="store.js"></script>
+	</body>
+</html>
