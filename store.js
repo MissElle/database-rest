@@ -69,7 +69,7 @@ function generateTable (response){
 	var chart = $('#database-layout');
 	$('.data').remove();
 	
-	for(var i=0; i<response.length; ++i) {
+	for(var i in response) {
 		var chName = response[i].name;
 		var chRace = response[i].race;
 		var chClass = response[i].class;
@@ -169,13 +169,11 @@ $(document).ready(function(){
 	$('#add-cha').click(function(){
 	  $('#database-layout').slideUp(170);
       $('#character-form').slideDown(170);
-      count = $(this).attr('id');
 	});
 	$('#cancel-data').click(function(){
       $('#database-layout').slideDown(170);
       $('#character-form').slideUp(170);
       clearInputs();
-      count = localStorage.count;
 	});
 	$('#add-data').click(function(){
       $('#database-layout').slideDown(170);
