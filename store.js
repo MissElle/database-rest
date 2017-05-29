@@ -4,8 +4,8 @@
 //These watch for button clicks to change the form. Also generate a table from local storage as soon as page is loaded.
 
 $('#add-data').on('click', getData);
-$('.edit-data').on('click', editData);
-$('.delete-data').on('click', deleteData);
+$('#database-layout').on('click', '.edit-data', editData);
+$('#database-layout').on('click', '.delete-data', deleteData);
 
 //-----------------------------------------------------------------------------//
 //These are global variables and initial functions.
@@ -103,39 +103,47 @@ function generateTable (response){
 //-----------------------------------------------------------------------------//
 //This function deletes the JSON and div row
 
-function deleteData() {
-  var i = $(this).attr('id');
+function deleteData(id) {
+  var id = $(this).attr('id');
   
-  localStorage.removeItem('name'+i);
-  localStorage.removeItem('race'+i);
-  localStorage.removeItem('class'+i);
-  localStorage.removeItem('str'+i);
-  localStorage.removeItem('dex'+i);
-  localStorage.removeItem('con'+i);
-  localStorage.removeItem('int'+i);
-  localStorage.removeItem('wis'+i);
-  localStorage.removeItem('cha'+i);
-  localStorage.removeItem('portrait'+i);
-    
-  generateTable();
-}
+	$.ajax( BASE_URL + collection + '/' + id,
+		{
+			method: 'DELETE',
+			success: pullData,
+			error: reportAjaxError
+		});
+ }
 
 //-----------------------------------------------------------------------------//
 //This clears the input fields
 
 function editData() {
-  count = $(this).attr('id');
+  id = $(this).attr('id');
   
-  var chName = $('#data-name').val(localStorage['name'+count]);
-  var chRace = $('#select-race').val(localStorage['race'+count]);
-  var chClass = $('#select-class').val(localStorage['class'+count]);
-  var chStr = $('#data-str').val(localStorage['str'+count]);
-  var chDex = $('#data-dex').val(localStorage['dex'+count]);
-  var chCon = $('#data-con').val(localStorage['con'+count]);
-  var chInt = $('#data-int').val(localStorage['int'+count]);
-  var chWis = $('#data-wis').val(localStorage['wis'+count]);
-  var chCha = $('#data-cha').val(localStorage['cha'+count]);
-  var chPor = $('#data-file').val(localStorage['portrait'+count]);
+	$.ajax( BASE_URL + collection + '/' +id,
+		{
+			method: 'GET',
+			success: postEdit,
+			error: reportAjaxError
+		});
+}
+
+//-----------------------------------------------------------------------------//
+//This pulls the data read from the editData button and handles changes
+
+function postEdit (data){
+	var id = data._id;
+	
+  var chName = $('#data-name').val(data.name);
+  var chRace = $('#select-race').val(data.race);
+  var chClass = $('#select-class').val(data.class);
+  var chStr = $('#data-str').val(data.str);
+  var chDex = $('#data-dex').val(data.dex);
+  var chCon = $('#data-con').val(data.con);
+  var chInt = $('#data-int').val(data.int);
+  var chWis = $('#data-wis').val(data.wis);
+  var chCha = $('#data-cha').val(data.cha);
+  var chPor = $('#data-file').val(data.por);
  
 }
 
