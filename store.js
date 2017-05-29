@@ -6,6 +6,9 @@
 $('#add-data').on('click', getData);
 $('#database-layout').on('click', '.edit-data', editData);
 $('#database-layout').on('click', '.delete-data', deleteData);
+$('#alert-box').on('click', '.confirm-delete', deleteChar);
+$('#alert-box').on('click', '.cancel-delete', cancelDelete);
+$('#error-box').on('click', '.confirm-error', confirmError);
 
 //-----------------------------------------------------------------------------//
 //These are global variables and initial functions.
@@ -101,57 +104,79 @@ function generateTable (response){
 }
 
 //-----------------------------------------------------------------------------//
-//This function deletes the JSON and div row
+//This function pulls up the alert box and asks to confirm deleting
 
-function deleteData(id) {
-  var id = $(this).attr('id');
-  
-	$.ajax( BASE_URL + collection + '/' + id,
-		{
-			method: 'DELETE',
-			success: pullData,
-			error: reportAjaxError
-		});
- }
+function deleteData(data) {
+	var id = $(this).attr('id');
+	$('.confirm-delete').attr('id', id);
+  $('#alert-box').fadeIn(300);
+}
 
 //-----------------------------------------------------------------------------//
-//This clears the input fields
+//deletes the data 
+
+function deleteChar(data) {
+	var id = $(this).attr('id');
+	$.ajax( BASE_URL + collection + '/' + id,
+			{
+				method: 'DELETE',
+				success: pullData,
+				error: reportAjaxError
+			});
+		$('#alert-box').fadeOut(300);
+}
+
+//-----------------------------------------------------------------------------//
+//cancels the delete request
+
+function cancelDelete () {
+	$('.confirm-delete').removeAttr('id');
+	$('#alert-box').fadeOut(300);
+}
+
+//-----------------------------------------------------------------------------//
+//edits the data 
 
 function editData() {
-  id = $(this).attr('id');
+  var id = $(this).attr('id');
   
 	$.ajax( BASE_URL + collection + '/' +id,
 		{
 			method: 'GET',
-			success: postEdit,
+			success: function postEdit(data){
+				  var chName = $('#data-name').val(data.name);
+					var chRace = $('#select-race').val(data.race);
+					var chClass = $('#select-class').val(data.class);
+					var chStr = $('#data-str').val(data.str);
+					var chDex = $('#data-dex').val(data.dex);
+					var chCon = $('#data-con').val(data.con);
+					var chInt = $('#data-int').val(data.int);
+					var chWis = $('#data-wis').val(data.wis);
+					var chCha = $('#data-cha').val(data.cha);
+					var chPor = $('#data-file').val(data.por);
+			},
 			error: reportAjaxError
 		});
-}
-
-//-----------------------------------------------------------------------------//
-//This pulls the data read from the editData button and handles changes
-
-function postEdit (data){
-	var id = data._id;
 	
-  var chName = $('#data-name').val(data.name);
-  var chRace = $('#select-race').val(data.race);
-  var chClass = $('#select-class').val(data.class);
-  var chStr = $('#data-str').val(data.str);
-  var chDex = $('#data-dex').val(data.dex);
-  var chCon = $('#data-con').val(data.con);
-  var chInt = $('#data-int').val(data.int);
-  var chWis = $('#data-wis').val(data.wis);
-  var chCha = $('#data-cha').val(data.cha);
-  var chPor = $('#data-file').val(data.por);
- 
+	$('#add-data').on('click', function () {
+			$.ajax( BASE_URL + collection + '/' + id,
+			{
+				method: 'DELETE',
+				success: pullData,
+				error: reportAjaxError
+			});
+		});
 }
 
 //-----------------------------------------------------------------------------//
 //This generates an error message
 
 function reportAjaxError() {
-	console.log("this is an error");
+	$('#error-box').fadeIn(300);
+}
+
+function confirmError() {
+	$('#error-box').fadeOut(300);
 }
 
 //-----------------------------------------------------------------------------//
@@ -182,7 +207,6 @@ $(document).ready(function(){
     $('#database-layout').on('click', '.edit-data', function(){
 	  $('#database-layout').slideUp(170);
       $('#character-form').slideDown(170);
-	});
-	
+	});	
 	pullData();
 });
