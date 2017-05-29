@@ -1,26 +1,17 @@
-//-----------------------------------------------------------------------------//
-
-// store.js - script for storing and editing JSON in local storage
+// store.js - script for storing and editing data in .ajax
 
 //-----------------------------------------------------------------------------//
-//These watch for button clicks to change the form. Also hide the form as soon as it's loaded while showing table content.
+//These watch for button clicks to change the form. Also generate a table from local storage as soon as page is loaded.
 
 $('#add-data').on('click', getData);
-$('#database-layout').on('click', '.edit-data', editData);
-$('#database-layout').on('click', '.delete-data', deleteData);
-
-$('#database-layout').slideDown(170);
-$('#character-form').slideUp(170);
+$('.edit-data').on('click', editData);
+$('.delete-data').on('click', deleteData);
 
 //-----------------------------------------------------------------------------//
-//This looks to see if their is already a count in local storage. If there isn't the count is set to 0. If there is, it will pick up from the last count.
+//These are global variables and initial functions.
 
-var count;
-if (localStorage.count) {
-	count = localStorage.count;
-}else {
-	count = 0;
-}
+var BASE_URL = "https://pacific-meadow-64112.herokuapp.com/data-api/";
+var collection = "epope";
 
 $('#database-layout').slideDown(170);
 $('#character-form').slideUp(170);
@@ -29,10 +20,6 @@ $('#character-form').slideUp(170);
 //function gets new data and pushes to localStorage
 
 function getData(){
-  if (count === 'add-cha') {
-    count = localStorage.count;
-  }
-  
 	var chName = $('#data-name').val();
 	var chRace = $('#select-race option:selected').val();
 	var chClass = $('#select-class option:selected').val();
@@ -44,20 +31,9 @@ function getData(){
 	var chCha = $('#data-cha').val();
 	var chPor = $('#data-file').val();
 	
-	localStorage.setItem('name'+count, chName);
-	localStorage.setItem('race'+count, chRace);
-	localStorage.setItem('class'+count, chClass);
-	localStorage.setItem('str'+count, chStr);
-	localStorage.setItem('dex'+count, chDex);
-	localStorage.setItem('con'+count, chCon);
-	localStorage.setItem('int'+count, chInt);
-	localStorage.setItem('wis'+count, chWis);
-	localStorage.setItem('cha'+count, chCha);
-	localStorage.setItem('portrait'+count, chPor);
-
-    count = localStorage.count;
-	++count;
-	localStorage.setItem('count', count);
+	var newChar = {"name": chName, "race": chRace, "class": chClass, "str": chStr, "dex": chDex, "con": chCon, "int": chInt, "wis": chWis, "cha": chCha, "por": chPor}
+	
+	pushData(newChar);
 	
 	clearInputs();
 	generateTable();
@@ -65,30 +41,63 @@ function getData(){
 }
 
 //-----------------------------------------------------------------------------//
+//function pushes collected data to server to store
+
+function pushData(chara) {
+	clearInputs();
+	$.ajax(BASE_URL + collection,
+		{
+			method: 'POST',
+			dataType: 'json',
+			data: chara,
+			success: pullData,
+			error: reportAjaxError
+		}
+	);
+}
+
+//-----------------------------------------------------------------------------//
+//This function is to retrieve the data
+
+function pullData(){
+	$.getJSON("https://pacific-meadow-64112.herokuapp.com/data-api/epope", generateTable);
+}
+//-----------------------------------------------------------------------------//
 //This function generates the table each time a JSON object is added, edited, or removed.
 
-function generateTable (){
+function generateTable (response){
 	var chart = $('#database-layout');
 	$('.data').remove();
-	for(var i=0; i<count; ++i) {
-      if (localStorage['str'+i] !== undefined){
-		var row = $('<div>').addClass('row data').attr('id', i);
-		var col = $('<div>').addClass('col').text(localStorage['name'+i]);
+	
+	for(var i=0; i<response.length; ++i) {
+		var chName = response[i].name;
+		var chRace = response[i].race;
+		var chClass = response[i].class;
+		var chStr = response[i].str;
+		var chDex = response[i].dex;
+		var chCon = response[i].con;
+		var chInt = response[i].int;
+		var chWis = response[i].wis;
+		var chCha = response[i].cha;
+		var chPor = response[i].por;
+
+		var id = response[i]._id;
+
+		var row = $('<div>').addClass('row data').attr('id', id);
+		var col = $('<div>').addClass('col').text(chName);
 		row.append(col);
-		col = $('<div>').addClass('col').text(localStorage['race'+i]);
+		col = $('<div>').addClass('col').text(chRace);
 		row.append(col);
-		col = $('<div>').addClass('col').text(localStorage['class'+i]);
+		col = $('<div>').addClass('col').text(chClass);
 		row.append(col);
-		col = $('<div>').addClass('col').html('<div class="statnumbers"><p>Str:'+localStorage['str'+i]+'</p>'+'<p>Dex:'+localStorage['dex'+i]+'</p>'+'<p>Con:'+localStorage['con'+i]+'</p></div>'+'<div class="statnumbers"><p>Int:'+localStorage['int'+i]+'</p>'+'<p>Wis:'+localStorage['wis'+i]+'</p>'+'<p>Cha:'+localStorage['cha'+i]+'</p></div>');
+		col = $('<div>').addClass('col').html('<div class="statnumbers"><p>Str:'+chStr+'</p>'+'<p>Dex:'+chDex+'</p>'+'<p>Con:'+chCon+'</p></div>'+'<div class="statnumbers"><p>Int:'+chInt+'</p>'+'<p>Wis:'+chWis+'</p>'+'<p>Cha:'+chCha+'</p></div>');
 		row.append(col);
-		col = $('<div>').addClass('col').text(localStorage['portrait'+i]);
+		col = $('<div>').addClass('col').text(chPor);
 		row.append(col);
-		col=$('<div>').addClass('col').html('<button class="edit-data" id="'+i+'">Edit</button><button class="delete-data" id="'+i+'">Delete</button>');
+		col=$('<div>').addClass('col').html('<button class="edit-data" id="'+id+'">Edit</button><button class="delete-data" id="'+id+'">Delete</button>');
 		row.append(col);
-		
 		chart.append(row);
-      }
-    }
+	}
 }
 
 //-----------------------------------------------------------------------------//
@@ -131,6 +140,13 @@ function editData() {
 }
 
 //-----------------------------------------------------------------------------//
+//This generates an error message
+
+function reportAjaxError() {
+	console.log("this is an error");
+}
+
+//-----------------------------------------------------------------------------//
 //This clears the input fields
 
 function clearInputs() {
@@ -162,5 +178,5 @@ $(document).ready(function(){
       $('#character-form').slideDown(170);
 	});
 	
-	generateTable();
+	pullData();
 });
